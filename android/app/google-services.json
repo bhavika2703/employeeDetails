@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "598557414077",
+    "project_id": "employee-details-c68f3",
+    "storage_bucket": "employee-details-c68f3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598557414077:android:ab584087154000bab05dd4",
+        "android_client_info": {
+          "package_name": "com.example.realtime_innovations_assignment2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598557414077-m5cr13a7ib8aospc8efsebfjp84lbpt2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBXZ8tmXptCgD6YaryMOY-xCrJZ8rzHvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598557414077-m5cr13a7ib8aospc8efsebfjp84lbpt2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
