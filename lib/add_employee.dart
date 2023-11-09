@@ -7,7 +7,6 @@ import 'package:realtime_innovations_assignment2/emp_model.dart';
 import 'package:realtime_innovations_assignment2/firestore_database.dart';
 import 'package:realtime_innovations_assignment2/utils/calendar_widget.dart';
 import 'package:realtime_innovations_assignment2/utils/device.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:uuid/uuid.dart';
 
 class AddEmployee extends StatefulWidget {
@@ -147,7 +146,7 @@ class _AddEmployeeState extends State<AddEmployee> {
     );
   }
 
-  String empUniqueId() => Uuid().v4();
+  String empUniqueId() => const Uuid().v4();
 
   Widget nameFormFiledView() {
     return Padding(
@@ -268,7 +267,7 @@ class _AddEmployeeState extends State<AddEmployee> {
           ),
           noDataContainerView(
             calenderText: Text(
-               noDate ==false &&  noDateSelected != null
+                noDate == false && noDateSelected != null
                     ? DateFormat('dd MMM yy').format(noDateSelected!).toString()
                     : 'No date',
                 style: TextStyle(
@@ -303,7 +302,7 @@ class _AddEmployeeState extends State<AddEmployee> {
 
                         return selectedDate;
                       },
-                      noDateDaySelected: (DateTime) {},
+                      noDateDaySelected: (bool dateTime) {},
                     ),
                   ),
                 ));
@@ -372,14 +371,11 @@ class _AddEmployeeState extends State<AddEmployee> {
                             noDateSelected = pickedDate;
                           });
                         });
-
-
                       },
                       noDateDaySelected: (bool noDateValue) {
                         WidgetsBinding.instance.addPostFrameCallback((_) {
                           setState(() {
                             noDate = noDateValue;
-                            print('no date value ${noDate}');
                           });
                         });
                         return noDate;
@@ -461,156 +457,7 @@ class _AddEmployeeState extends State<AddEmployee> {
   Divider divider() =>
       Divider(thickness: 0.5, color: AppColors.lightGrayColor.withOpacity(0.5));
 
-  Widget openCalenderView() {
-    return SfCalendar(
-      view: CalendarView.month,
-      cellBorderColor: Colors.transparent,
-      initialDisplayDate: DateTime.now(),
-      headerHeight: 70,
-      headerDateFormat: 'MMMM yyy',
-      headerStyle: const CalendarHeaderStyle(textAlign: TextAlign.center),
-      todayTextStyle: getTodayTextStyle(),
-      monthCellBuilder: monthCellBuilder,
-      todayHighlightColor: Colors.black,
-      monthViewSettings: const MonthViewSettings(
-        monthCellStyle: MonthCellStyle(
-          textStyle: TextStyle(color: AppColors.themeColor),
-        ),
-        dayFormat: 'EEE',
-      ),
-      dataSource: MeetingDataSource(_getDataSource()),
-    );
-  }
-
-  Widget openNoDateCalenderView() {
-    return SfCalendar(
-      view: CalendarView.month,
-      cellBorderColor: Colors.transparent,
-      initialDisplayDate: DateTime.now(),
-      headerHeight: 70,
-      headerDateFormat: 'MMMM yyy',
-      headerStyle: const CalendarHeaderStyle(textAlign: TextAlign.center),
-      todayTextStyle: getTodayTextStyle(),
-      monthCellBuilder: monthCellBuilder,
-      todayHighlightColor: Colors.black,
-      monthViewSettings: const MonthViewSettings(
-        monthCellStyle: MonthCellStyle(
-          textStyle: TextStyle(color: AppColors.themeColor),
-        ),
-        dayFormat: 'EEE',
-      ),
-      dataSource: MeetingDataSource(_getDataSource()),
-    );
-  }
-
-  List<Meeting> _getDataSource() {
-    final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
-    return meetings;
-  }
-
   TextStyle getTodayTextStyle() => const TextStyle(color: AppColors.themeColor);
 }
 
-Widget monthCellBuilder(BuildContext context, MonthCellDetails details) {
-  var mid = details.visibleDates.length ~/ 2.toInt();
-  var midDate = details.visibleDates[0].add(Duration(days: mid));
-
-  if (details.date.month != midDate.month) {
-    return Container(
-      alignment: Alignment.center,
-      child: Text(
-        details.date.day.toString(),
-        style: const TextStyle(color: AppColors.lightGrayColor),
-      ),
-    );
-  } else {
-    return Container(
-      alignment: Alignment.center,
-      child: Text(
-        details.date.day.toString(),
-        style: getTextStyleForMonthView(details.date),
-      ),
-    );
-  }
-}
-
-TextStyle getTextStyleForMonthView(DateTime date) {
-  final DateTime now = DateTime.now();
-  final DateTime todayDate = DateTime(now.year, now.month, now.day);
-  if (todayDate.day == date.day && todayDate.month == date.month) {
-    return getTodayTextStyle();
-  }
-  return const TextStyle(color: AppColors.calenderBgTextColor);
-}
-
 TextStyle getTodayTextStyle() => const TextStyle(color: AppColors.themeColor);
-
-/// An object to set the appointment collection data source to calendar, which
-/// used to map the custom appointment data to the calendar appointment, and
-/// allows to add, remove or reset the appointment collection.
-class MeetingDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
-  MeetingDataSource(List<Meeting> source) {
-    appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return _getMeetingData(index).from;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return _getMeetingData(index).to;
-  }
-
-  @override
-  String getSubject(int index) {
-    return _getMeetingData(index).eventName;
-  }
-
-  @override
-  Color getColor(int index) {
-    return _getMeetingData(index).background;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return _getMeetingData(index).isAllDay;
-  }
-
-  Meeting _getMeetingData(int index) {
-    final dynamic meeting = appointments![index];
-    late final Meeting meetingData;
-    if (meeting is Meeting) {
-      meetingData = meeting;
-    }
-
-    return meetingData;
-  }
-}
-
-/// Custom business object class which contains properties to hold the detailed
-/// information about the event data which will be rendered in calendar.
-class Meeting {
-  /// Creates a meeting class with required details.
-  Meeting(this.eventName, this.from, this.to, this.background, this.isAllDay);
-
-  /// Event name which is equivalent to subject property of [Appointment].
-  String eventName;
-
-  /// From which is equivalent to start time property of [Appointment].
-  DateTime from;
-
-  /// To which is equivalent to end time property of [Appointment].
-  DateTime to;
-
-  /// Background which is equivalent to color property of [Appointment].
-  Color background;
-
-  /// IsAllDay which is equivalent to isAllDay property of [Appointment].
-  bool isAllDay;
-}

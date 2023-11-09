@@ -8,7 +8,6 @@ import 'package:realtime_innovations_assignment2/firestore_database.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //when app load then firebase also initialize
   await Firebase.initializeApp();
   runApp(const MyApp());
 }

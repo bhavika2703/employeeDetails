@@ -55,7 +55,6 @@ class _EmpListState extends State<EmpList> {
                     stream: FireStoreServices().listenEmpData(),
                     builder: (context, snapshot) {
                       if (snapshot.data != null) {
-                        var  now= DateTime.now();
                     var startingDate  = snapshot.data!.last.startDate;
                         return Column(
                           children: [
@@ -142,7 +141,7 @@ class _EmpListState extends State<EmpList> {
                 ),
 
                 Container(
-                  margin: EdgeInsets.only(top: 10),
+                  margin: const EdgeInsets.only(top: 10),
                   height: 70,
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(left: 12),
